@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    container_name: tfm-spring
+    restart: always
+    ports:
+      - "8081:8081"
+    labels:
+      - "es.upm.miw.tfm-spring=app"
+#      SPRING_PROFILES_ACTIVE: dev  # Activa el perfil 'dev'
