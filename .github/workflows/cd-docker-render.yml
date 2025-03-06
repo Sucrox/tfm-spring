@@ -21,8 +21,10 @@ jobs:
         # PACKAGE_PATH: ruta de los paquetes de destino
         # VERSION: versión sacado del fichero POM
         run: |
-          REPOSITORY=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          echo "REPOSITORY=${{ github.repository }}" >> $GITHUB_ENV
+          REPOSITORY="${{ github.repository }}" 
+          LOWER_REPOSITORY=$(echo $REPOSITORY | tr '[:upper:]' '[:lower:]')
+
+          echo "REPOSITORY=$LOWER_REPOSITORY" >> $GITHUB_ENV
           echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
           echo "PACKAGE_PATH=ghcr.io/${{ github.repository }}" >> $GITHUB_ENV
       - name: Show NAMES
