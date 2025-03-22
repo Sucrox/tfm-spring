@@ -1,7 +1,7 @@
-package es.upm.miw.companyds.tfm_spring.configurations;
+package es.upm.miw.companyds.tfm_spring.config;
 
-import es.upm.miw.companyds.tfm_spring.data.model.User;
-import es.upm.miw.companyds.tfm_spring.data.daos.UserRepository;
+import es.upm.miw.companyds.tfm_spring.persistence.model.User;
+import es.upm.miw.companyds.tfm_spring.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,10 +38,10 @@ public class SecurityConfiguration {
     @Bean
     public UserDetailsService userDetailsService() {
         return mobile -> {
-            User user = userRepository.findByMobile(mobile)
+            User user = userRepository.findByPhone(mobile)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             return org.springframework.security.core.userdetails.User.builder()
-                    .username(user.getMobile())
+                    .username(user.getPhone())
                     .password(user.getPassword())
                     .roles(user.getRole().name())
                     .build();

@@ -1,7 +1,7 @@
-package es.upm.miw.companyds.tfm_spring.data.model;
+package es.upm.miw.companyds.tfm_spring.persistence.model;
 
 public enum Role {
-    ADMIN, MANAGER, OPERATOR, CUSTOMER, AUTHENTICATED;
+    ADMIN, CUSTOMER;
 
     public static final String PREFIX = "ROLE_";
 

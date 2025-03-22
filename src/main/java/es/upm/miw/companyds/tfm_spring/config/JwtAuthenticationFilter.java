@@ -1,7 +1,7 @@
-package es.upm.miw.companyds.tfm_spring.configurations;
+package es.upm.miw.companyds.tfm_spring.config;
 
 
-import es.upm.miw.companyds.tfm_spring.data.model.Role;
+import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
 import es.upm.miw.companyds.tfm_spring.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

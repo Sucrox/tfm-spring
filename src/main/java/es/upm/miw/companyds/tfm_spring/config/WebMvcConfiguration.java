@@ -1,4 +1,4 @@
-package es.upm.miw.companyds.tfm_spring.configurations;
+package es.upm.miw.companyds.tfm_spring.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

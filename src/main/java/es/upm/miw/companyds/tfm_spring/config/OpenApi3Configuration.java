@@ -1,4 +1,4 @@
-package es.upm.miw.companyds.tfm_spring.configurations;
+package es.upm.miw.companyds.tfm_spring.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
