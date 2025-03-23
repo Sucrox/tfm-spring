@@ -34,8 +34,6 @@ public class UserDto {
     @NotBlank
     private String dni;
     @NotBlank
-    private String address;
-    @NotBlank
     private String password;
     private Role role;
 
