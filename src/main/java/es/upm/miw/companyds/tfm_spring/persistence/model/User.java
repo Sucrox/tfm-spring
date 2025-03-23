@@ -11,19 +11,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "cdsUser") // conflict with user table
+@Table(name = "cds_user")
 public class User {
     @Id
     @GeneratedValue
     private int id;
     @Column(unique = true, nullable = false)
     private String phone;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String familyName;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String dni;
 //TODO
 //  private String address;
+    @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
