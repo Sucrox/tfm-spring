@@ -37,8 +37,8 @@ public class SecurityConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return mobile -> {
-            User user = userRepository.findByPhone(mobile)
+        return phone -> {
+            User user = userRepository.findByPhone(phone)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             return org.springframework.security.core.userdetails.User.builder()
                     .username(user.getPhone())

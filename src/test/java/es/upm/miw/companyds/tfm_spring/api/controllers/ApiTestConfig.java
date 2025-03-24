@@ -1,4 +1,4 @@
-package es.upm.miw.companyds.tfm_spring;
+package es.upm.miw.companyds.tfm_spring.api.controllers;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,9 +15,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:test.properties")
 @ActiveProfiles("dev")
-
-public @interface TestConfig {
+public @interface ApiTestConfig {
 }
