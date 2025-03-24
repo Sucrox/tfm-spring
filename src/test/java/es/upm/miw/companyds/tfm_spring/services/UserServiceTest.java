@@ -1,10 +1,14 @@
 package es.upm.miw.companyds.tfm_spring.services;
 
 import es.upm.miw.companyds.tfm_spring.TestConfig;
+import es.upm.miw.companyds.tfm_spring.api.dto.LoginDto;
+import es.upm.miw.companyds.tfm_spring.api.dto.TokenDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
 import es.upm.miw.companyds.tfm_spring.persistence.model.User;
 import es.upm.miw.companyds.tfm_spring.persistence.repository.UserRepository;
+import es.upm.miw.companyds.tfm_spring.services.exceptions.ForbiddenException;
+import es.upm.miw.companyds.tfm_spring.services.exceptions.NotFoundException;
 import es.upm.miw.companyds.tfm_spring.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +44,30 @@ public class UserServiceTest {
         User savedUser = savedUserOpt.get();
         assertEquals("666000666", savedUser.getPhone());
         assertEquals(Role.CUSTOMER, savedUser.getRole());
+    }
+
+    @Test
+    void testLoginUserSuccessful() {
+        LoginDto loginDto = LoginDto.builder().email("juan.perez@example.com")
+                .password("password123").build();
+
+        TokenDto token= new TokenDto(userService.login(loginDto));
+        assertNotNull(token);
+    }
+    @Test
+    void testLoginUser_403Forbidden() {
+        LoginDto loginDto = LoginDto.builder().email("juan.perez@example.com")
+                .password("wrongpassword").build();
+        Exception exception = assertThrows(ForbiddenException.class, () -> {
+            userService.login(loginDto);
+        });
+    }
+    @Test
+    void testLoginUser_404NotFound() {
+        LoginDto loginDto = LoginDto.builder().email("notFound@example.com")
+                .password("wrongpassword").build();
+        Exception exception = assertThrows(NotFoundException.class, () -> {
+            userService.login(loginDto);
+        });
     }
 }
