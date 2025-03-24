@@ -23,4 +23,13 @@ public class UserRepositoryTest {
         assertEquals("87654321B", user.getDni());
     }
 
+    @Test
+    void testReadByEmail() {
+        assertTrue(this.userRepository.findByEmail("juan.perez@example.com").isPresent());
+        User user = this.userRepository.findByEmail("juan.perez@example.com").get();
+        assertEquals("Juan", user.getFirstName());
+        assertEquals("12345678A", user.getDni());
+    }
+
+
 }

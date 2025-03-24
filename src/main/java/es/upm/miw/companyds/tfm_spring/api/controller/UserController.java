@@ -1,5 +1,7 @@
 package es.upm.miw.companyds.tfm_spring.api.controller;
 
+import es.upm.miw.companyds.tfm_spring.api.dto.LoginDto;
+import es.upm.miw.companyds.tfm_spring.api.dto.TokenDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
 import es.upm.miw.companyds.tfm_spring.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     public static final String USERS = "/users";
+    public static final String LOGIN = "/login";
 
     private final UserServiceImpl userService;
 
@@ -28,4 +31,11 @@ public class UserController {
         userService.registerUser(userDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @PostMapping(value = LOGIN)
+    public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto) {
+        TokenDto token = new TokenDto(userService.login(loginDto));
+        return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
 }
