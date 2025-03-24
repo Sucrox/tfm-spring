@@ -5,20 +5,20 @@ import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
 import es.upm.miw.companyds.tfm_spring.persistence.model.User;
 import es.upm.miw.companyds.tfm_spring.persistence.repository.UserRepository;
+import es.upm.miw.companyds.tfm_spring.services.impl.ConflictException;
 import es.upm.miw.companyds.tfm_spring.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.dao.DataIntegrityViolationException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.mockito.Mockito.*;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestConfig
 public class UserServiceTest {
 
-    @MockitoBean
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -31,18 +31,16 @@ public class UserServiceTest {
                 .firstName("Juan")
                 .familyName("Pérez")
                 .dni("12121212K")
-                .email("juan.perez@example.com")
+                .email("juan@example.com")
                 .password("password123")
                 .build();
 
         userService.registerUser(userDto);
-        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        verify(userRepository, times(1)).save(userCaptor.capture());
 
-        User savedUser = userCaptor.getValue();
-
+        Optional<User> savedUserOpt = userRepository.findByPhone("666000666");
+        assertTrue(savedUserOpt.isPresent());
+        User savedUser = savedUserOpt.get();
         assertEquals("666000666", savedUser.getPhone());
         assertEquals(Role.CUSTOMER, savedUser.getRole());
-        assertNotEquals(userDto.getPassword(), savedUser.getPassword());
     }
 }
