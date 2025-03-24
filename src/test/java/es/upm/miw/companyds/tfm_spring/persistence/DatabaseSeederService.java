@@ -1,6 +1,5 @@
 package es.upm.miw.companyds.tfm_spring.persistence;
 
-import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
