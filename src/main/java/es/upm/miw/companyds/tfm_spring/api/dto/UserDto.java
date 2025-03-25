@@ -46,6 +46,17 @@ public class UserDto {
         }
     }
 
+    public static UserDto ofUser(User user) {
+        return UserDto.builder()
+                .phone(user.getPhone())
+                .firstName(user.getFirstName())
+                .familyName(user.getFamilyName())
+                .email(user.getEmail())
+                .dni(user.getDni())
+                .role(user.getRole())
+                .build();
+    }
+
     public User toUser() {
         this.doDefault();
         User user = new User();
