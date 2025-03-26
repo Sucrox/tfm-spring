@@ -52,6 +52,12 @@ public class UserController {
         return this.userService.getUserById(id,this.extractRoleClaims());
     }
 
+    @PostMapping
+    public UserDto createUser(@RequestBody UserDto userDto) {
+        return this.userService.createUser(userDto, this.extractRoleClaims());
+    }
+
+
     private Role extractRoleClaims() {
         List<String> roleClaims = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).toList();

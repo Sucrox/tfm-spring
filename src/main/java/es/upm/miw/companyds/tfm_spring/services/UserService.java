@@ -16,4 +16,6 @@ public interface UserService {
     Stream<UserDto> getAllUsers(Role role);
 
     UserDto getUserById(Integer id, Role role);
+
+    UserDto createUser(UserDto user, Role role);
 }

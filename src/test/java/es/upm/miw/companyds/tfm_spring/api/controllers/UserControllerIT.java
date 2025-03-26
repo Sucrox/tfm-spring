@@ -13,7 +13,7 @@ import org.springframework.http.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ApiTestConfig
-public class UserControllerTest {
+public class UserControllerIT {
 
     @Autowired
     private TestRestTemplate testRestTemplate;

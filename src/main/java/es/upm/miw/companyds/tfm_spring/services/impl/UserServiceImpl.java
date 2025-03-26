@@ -79,6 +79,20 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundException("There's no user for id:" + id));
 
     }
+
+    @Override
+    public UserDto createUser(UserDto userDto, Role role) {
+        if (role != Role.ADMIN) {
+            throw new ForbiddenException("Unauthorized operation");
+        }
+        if (userRepository.findByPhone(userDto.getPhone()).isPresent()) {
+            throw new ConflictException("User already exists");
+        }
+        return UserDto.ofUser(this.userRepository.save(userDto.toUser()));
+    }
+
+
+
     private Integer extractUserID() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
