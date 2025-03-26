@@ -120,6 +120,18 @@ public class UserServiceImpl implements UserService {
         return UserDto.ofUser(this.userRepository.save(user));
     }
 
+    @Override
+    public void deleteUser(Integer id, Role role) {
+        if(!role.equals(Role.ADMIN)) {
+            throw new ForbiddenException("You are not allowed to make this call");
+        }
+        userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User does not exist"));
+
+         userRepository.deleteById(id);
+    }
+
+
     private Integer extractUserID() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {

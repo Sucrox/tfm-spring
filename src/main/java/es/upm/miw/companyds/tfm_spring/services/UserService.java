@@ -22,4 +22,7 @@ public interface UserService {
 
     UserDto updateUser(Integer id, UpdateUserDto updateUserDto, Role role);
 
+    void deleteUser(Integer id, Role role);
+
+
 }

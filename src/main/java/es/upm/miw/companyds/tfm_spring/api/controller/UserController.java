@@ -63,6 +63,12 @@ public class UserController {
         return this.userService.updateUser(id,updateUserDto, this.extractRoleClaims());
     }
 
+    @DeleteMapping(USER_ID)
+    public  ResponseEntity<Void> patch(@PathVariable Integer id) {
+        this.userService.deleteUser(id, this.extractRoleClaims());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     private Role extractRoleClaims() {
         List<String> roleClaims = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).toList();
