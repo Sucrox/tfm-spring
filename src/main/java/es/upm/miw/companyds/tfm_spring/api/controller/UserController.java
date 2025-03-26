@@ -2,6 +2,7 @@ package es.upm.miw.companyds.tfm_spring.api.controller;
 
 import es.upm.miw.companyds.tfm_spring.api.dto.LoginDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.TokenDto;
+import es.upm.miw.companyds.tfm_spring.api.dto.UpdateUserDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
 import es.upm.miw.companyds.tfm_spring.services.impl.UserServiceImpl;
@@ -57,6 +58,10 @@ public class UserController {
         return this.userService.createUser(userDto, this.extractRoleClaims());
     }
 
+    @PatchMapping(USER_ID)
+    public UserDto patch(@PathVariable Integer id, @RequestBody UpdateUserDto updateUserDto) {
+        return this.userService.updateUser(id,updateUserDto, this.extractRoleClaims());
+    }
 
     private Role extractRoleClaims() {
         List<String> roleClaims = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()

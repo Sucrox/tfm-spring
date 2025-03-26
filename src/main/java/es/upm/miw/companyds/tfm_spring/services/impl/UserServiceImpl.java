@@ -1,6 +1,7 @@
 package es.upm.miw.companyds.tfm_spring.services.impl;
 
 import es.upm.miw.companyds.tfm_spring.api.dto.LoginDto;
+import es.upm.miw.companyds.tfm_spring.api.dto.UpdateUserDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
 import es.upm.miw.companyds.tfm_spring.persistence.model.User;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.stream.Stream;
+
+import static es.upm.miw.companyds.tfm_spring.api.dto.validation.Validations.isValidEmail;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -91,7 +94,31 @@ public class UserServiceImpl implements UserService {
         return UserDto.ofUser(this.userRepository.save(userDto.toUser()));
     }
 
+    @Override
+    public UserDto updateUser(Integer id, UpdateUserDto updateUserDto, Role role) {
+        if(!Objects.equals(id, this.extractUserID()) && !role.equals(Role.ADMIN)) {
+            throw new ForbiddenException("You are not allowed to make this call");
+        }
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User does not exist"));
 
+        if (updateUserDto.getFirstName() != null && !updateUserDto.getFirstName().isEmpty()) {
+            user.setFirstName(updateUserDto.getFirstName());
+        }
+
+        if (updateUserDto.getFamilyName() != null && !updateUserDto.getFamilyName().isEmpty()) {
+            user.setFamilyName(updateUserDto.getFamilyName());
+        }
+
+        if (updateUserDto.getEmail() != null && !updateUserDto.getEmail().isEmpty()) {
+            if (isValidEmail(updateUserDto.getEmail())) {
+                user.setEmail(updateUserDto.getEmail());
+            } else {
+                throw new ConflictException("Provided email is not valid");
+            }
+        }
+        return UserDto.ofUser(this.userRepository.save(user));
+    }
 
     private Integer extractUserID() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
