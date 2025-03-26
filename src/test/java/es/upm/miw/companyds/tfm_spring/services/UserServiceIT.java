@@ -3,10 +3,12 @@ package es.upm.miw.companyds.tfm_spring.services;
 import es.upm.miw.companyds.tfm_spring.TestConfig;
 import es.upm.miw.companyds.tfm_spring.api.dto.LoginDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.TokenDto;
+import es.upm.miw.companyds.tfm_spring.api.dto.UpdateUserDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
 import es.upm.miw.companyds.tfm_spring.persistence.model.User;
 import es.upm.miw.companyds.tfm_spring.persistence.repository.UserRepository;
+import es.upm.miw.companyds.tfm_spring.services.exceptions.ConflictException;
 import es.upm.miw.companyds.tfm_spring.services.exceptions.ForbiddenException;
 import es.upm.miw.companyds.tfm_spring.services.exceptions.NotFoundException;
 import es.upm.miw.companyds.tfm_spring.services.impl.UserServiceImpl;
@@ -124,5 +126,71 @@ public class UserServiceIT {
 
     }
 
+    @Test
+    void testCreateUser() {
+        UserDto userDto =  UserDto.builder()
+                .phone("677711222")
+                .firstName("Juan")
+                .familyName("Perez")
+                .email("new@example.com")
+                .dni("77345678A")
+                .password("password123")
+                .build();
+        assertEquals(userDto.getPhone(), this.userService.createUser(userDto,Role.ADMIN).getPhone());
+    }
 
+    @Test
+    void testCreateUserExceptions() {
+        UserDto userDto =  UserDto.builder()
+                .phone("666111222")
+                .firstName("Juan")
+                .familyName("Perez")
+                .email("juan.perez@example.com")
+                .dni("12345678A")
+                .password("password123")
+                .role(Role.ADMIN)
+                .build();
+        assertThrows(ForbiddenException.class, () -> userService.createUser(userDto, Role.CUSTOMER));
+        assertThrows(ConflictException.class, () -> userService.createUser(userDto, Role.ADMIN));
+    }
+
+    @Test
+    void testUpdateUser() {
+        assertTrue(this.userRepository.findByPhone("616333625").isPresent());
+        User user = this.userRepository.findByPhone("616333625").get();
+        UpdateUserDto updateUserDto = UpdateUserDto.builder()
+                .firstName("Juan")
+                .familyName("Perez")
+                .email("newEmail@example.com")
+                .build();
+        assertEquals(updateUserDto.getEmail(), userService.updateUser(user.getId(),updateUserDto, Role.ADMIN).getEmail());
+    }
+
+    @Test
+    void testUpdateUserExceptions() {
+        assertTrue(this.userRepository.findByPhone("616333625").isPresent());
+        User user = this.userRepository.findByPhone("616333625").get();
+        UpdateUserDto updateUserDto = UpdateUserDto.builder()
+                .firstName("Juan")
+                .familyName("Perez")
+                .email("lalala")
+                .build();
+        assertThrows(NotFoundException.class, () -> userService.updateUser(-1,updateUserDto, Role.ADMIN));
+        assertThrows(ConflictException.class, () -> userService.updateUser(user.getId(),updateUserDto, Role.ADMIN));
+        assertThrows(ForbiddenException.class, () -> userService.updateUser(user.getId(), updateUserDto, Role.CUSTOMER));
+    }
+
+    @Test
+    void testDeleteUser() {
+        assertTrue(this.userRepository.findByPhone("616333999").isPresent());
+        User user = this.userRepository.findByPhone("616333999").get();
+        userService.deleteUser(user.getId(), Role.ADMIN);
+        assertFalse(this.userRepository.findByPhone("616333999").isPresent());
+    }
+
+    @Test
+    void testDeleteUserExceptions() {
+        assertThrows(NotFoundException.class, () -> userService.deleteUser(-1, Role.ADMIN));
+        assertThrows(ForbiddenException.class, () -> userService.deleteUser(-1, Role.CUSTOMER));
+    }
 }

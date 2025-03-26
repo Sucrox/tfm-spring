@@ -2,6 +2,7 @@ package es.upm.miw.companyds.tfm_spring.api.controllers;
 
 import es.upm.miw.companyds.tfm_spring.api.dto.LoginDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.TokenDto;
+import es.upm.miw.companyds.tfm_spring.api.dto.UpdateUserDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
 import es.upm.miw.companyds.tfm_spring.persistence.model.User;
 import es.upm.miw.companyds.tfm_spring.persistence.repository.UserRepository;
@@ -72,6 +73,59 @@ public class UserControllerIT {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
     }
+
+    @Test
+    void testCreateUser() {
+        HttpHeaders headers = authenticateUser();
+        UserDto userDto= UserDto.builder()
+                .phone("616333321")
+                .firstName("Controller")
+                .familyName("Controller")
+                .email("controller@example.com")
+                .dni("87123333B")
+                .password("456")
+                .build();
+
+        HttpEntity<UserDto> request = new HttpEntity<>(userDto, headers);
+
+        ResponseEntity<UserDto> response = testRestTemplate.exchange("/users", HttpMethod.POST, request, UserDto.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    void testUpdateUser() {
+        HttpHeaders headers = authenticateUser();
+        UpdateUserDto updateUserDto= UpdateUserDto.builder()
+                .familyName("Update")
+                .build();
+
+        assertTrue(this.userRepository.findByPhone("616333625").isPresent());
+        User user = this.userRepository.findByPhone("616333625").get();
+
+        HttpEntity<UpdateUserDto> request = new HttpEntity<>(updateUserDto, headers);
+
+        ResponseEntity<UserDto> response = testRestTemplate.exchange("/users/" + user.getId(), HttpMethod.PATCH, request, UserDto.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    void testDeleteUSer() {
+        HttpHeaders headers = authenticateUser();
+
+        HttpEntity<UpdateUserDto> request = new HttpEntity<>( headers);
+
+        assertTrue(this.userRepository.findByPhone("616312333").isPresent());
+        User user = this.userRepository.findByPhone("616312333").get();
+
+        ResponseEntity<Void> response = testRestTemplate.exchange("/users/" + user.getId(), HttpMethod.DELETE, request, Void.class);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    }
+
 
     private HttpHeaders authenticateUser() {
         LoginDto loginDto = LoginDto.builder().email("juan.perez@example.com").password("password123").build();

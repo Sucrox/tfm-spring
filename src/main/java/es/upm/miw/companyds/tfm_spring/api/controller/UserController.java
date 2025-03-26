@@ -59,12 +59,12 @@ public class UserController {
     }
 
     @PatchMapping(USER_ID)
-    public UserDto patch(@PathVariable Integer id, @RequestBody UpdateUserDto updateUserDto) {
+    public UserDto updateUser(@PathVariable Integer id, @RequestBody UpdateUserDto updateUserDto) {
         return this.userService.updateUser(id,updateUserDto, this.extractRoleClaims());
     }
 
     @DeleteMapping(USER_ID)
-    public  ResponseEntity<Void> patch(@PathVariable Integer id) {
+    public  ResponseEntity<Void> deleteUSer(@PathVariable Integer id) {
         this.userService.deleteUser(id, this.extractRoleClaims());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
