@@ -40,27 +40,28 @@ public class UserController {
     @PostMapping(value = LOGIN)
     public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto) {
         TokenDto token = new TokenDto(userService.login(loginDto));
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return ResponseEntity.ok(token);
     }
 
     @GetMapping
-    public Stream<UserDto> getAllUsers() {
-        return this.userService.getAllUsers(this.extractRoleClaims());
+    public ResponseEntity<Stream<UserDto>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers(this.extractRoleClaims()));
     }
 
     @GetMapping(USER_ID)
-    public UserDto getUser(@PathVariable Integer id) {
-        return this.userService.getUserById(id,this.extractRoleClaims());
+    public ResponseEntity<UserDto> getUser(@PathVariable Integer id) {
+        return ResponseEntity.ok(this.userService.getUserById(id, this.extractRoleClaims()));
     }
 
     @PostMapping
-    public UserDto createUser(@RequestBody UserDto userDto) {
-        return this.userService.createUser(userDto, this.extractRoleClaims());
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+        UserDto response = this.userService.createUser(userDto, this.extractRoleClaims());
+        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
 
     @PatchMapping(USER_ID)
-    public UserDto updateUser(@PathVariable Integer id, @RequestBody UpdateUserDto updateUserDto) {
-        return this.userService.updateUser(id,updateUserDto, this.extractRoleClaims());
+    public ResponseEntity<UserDto> updateUser(@PathVariable Integer id, @RequestBody UpdateUserDto updateUserDto) {
+        return ResponseEntity.ok(this.userService.updateUser(id,updateUserDto, this.extractRoleClaims()));
     }
 
     @DeleteMapping(USER_ID)

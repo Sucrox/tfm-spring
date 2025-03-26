@@ -90,7 +90,7 @@ public class UserControllerIT {
 
         ResponseEntity<UserDto> response = testRestTemplate.exchange("/users", HttpMethod.POST, request, UserDto.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody());
     }
 
