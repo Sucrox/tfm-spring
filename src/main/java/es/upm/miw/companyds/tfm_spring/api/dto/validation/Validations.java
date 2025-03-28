@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class Validations {
     public static final String VALID_PHONE = "^\\+(?:[0-9] ?){6,14}[0-9]$";
-    public static final String VALID_EMAIL = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+    public static final String VALID_EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
 
 
     private Validations() {
