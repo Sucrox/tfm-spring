@@ -26,8 +26,6 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String dni;
-//TODO
-//  private String address;
     @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)

@@ -56,12 +56,12 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
         UserDto response = this.userService.createUser(userDto, this.extractRoleClaims());
-        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PatchMapping(USER_ID)
     public ResponseEntity<UserDto> updateUser(@PathVariable Integer id, @RequestBody UpdateUserDto updateUserDto) {
-        return ResponseEntity.ok(this.userService.updateUser(id,updateUserDto, this.extractRoleClaims()));
+        return ResponseEntity.ok(this.userService.updateUser(id, updateUserDto, this.extractRoleClaims()));
     }
 
     @DeleteMapping(USER_ID)

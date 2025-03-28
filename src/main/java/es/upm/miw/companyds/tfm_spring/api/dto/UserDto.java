@@ -30,6 +30,7 @@ public class UserDto {
     @NotBlank
     private String familyName;
     @NotBlank
+    @Pattern(regexp = Validations.VALID_EMAIL)
     private String email;
     @NotBlank
     private String dni;
