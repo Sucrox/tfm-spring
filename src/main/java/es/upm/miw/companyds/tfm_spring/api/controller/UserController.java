@@ -9,6 +9,7 @@ import es.upm.miw.companyds.tfm_spring.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -43,27 +44,32 @@ public class UserController {
         return ResponseEntity.ok(token);
     }
 
+    @PreAuthorize("authenticated")
     @GetMapping
     public ResponseEntity<Stream<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers(this.extractRoleClaims()));
     }
 
+    @PreAuthorize("authenticated")
     @GetMapping(USER_ID)
     public ResponseEntity<UserDto> getUser(@PathVariable Integer id) {
         return ResponseEntity.ok(this.userService.getUserById(id, this.extractRoleClaims()));
     }
 
+    @PreAuthorize("authenticated")
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
         UserDto response = this.userService.createUser(userDto, this.extractRoleClaims());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("authenticated")
     @PatchMapping(USER_ID)
     public ResponseEntity<UserDto> updateUser(@PathVariable Integer id, @RequestBody UpdateUserDto updateUserDto) {
         return ResponseEntity.ok(this.userService.updateUser(id, updateUserDto, this.extractRoleClaims()));
     }
 
+    @PreAuthorize("authenticated")
     @DeleteMapping(USER_ID)
     public  ResponseEntity<Void> deleteUSer(@PathVariable Integer id) {
         this.userService.deleteUser(id, this.extractRoleClaims());
