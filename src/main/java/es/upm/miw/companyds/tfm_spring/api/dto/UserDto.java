@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
 import es.upm.miw.companyds.tfm_spring.api.dto.validation.Validations;
 import es.upm.miw.companyds.tfm_spring.persistence.model.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ public class UserDto {
     private String familyName;
     @NotBlank
     @Pattern(regexp = Validations.VALID_EMAIL)
+    @Schema(description = "Correo electrónico del usuario", example = "usuario@example.com")
     private String email;
     @NotBlank
     private String dni;
