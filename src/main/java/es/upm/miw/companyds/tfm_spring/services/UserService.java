@@ -1,6 +1,7 @@
 package es.upm.miw.companyds.tfm_spring.services;
 
 import es.upm.miw.companyds.tfm_spring.api.dto.LoginDto;
+import es.upm.miw.companyds.tfm_spring.api.dto.UpdateUserDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
 import jakarta.validation.Valid;
@@ -16,4 +17,12 @@ public interface UserService {
     Stream<UserDto> getAllUsers(Role role);
 
     UserDto getUserById(Integer id, Role role);
+
+    UserDto createUser(UserDto user, Role role);
+
+    UserDto updateUser(Integer id, UpdateUserDto updateUserDto, Role role);
+
+    void deleteUser(Integer id, Role role);
+
+
 }
