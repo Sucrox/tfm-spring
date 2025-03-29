@@ -2,12 +2,15 @@ package es.upm.miw.companyds.tfm_spring.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Address;
+import es.upm.miw.companyds.tfm_spring.persistence.model.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Data
 @NoArgsConstructor
@@ -37,5 +40,11 @@ public class AddressDto {
                 .city(address.getCity())
                 .userId(address.getUser().getId())
                 .build();
+    }
+
+    public Address toAddress() {
+        Address address = new Address();
+        BeanUtils.copyProperties(this, address);
+        return address;
     }
 }

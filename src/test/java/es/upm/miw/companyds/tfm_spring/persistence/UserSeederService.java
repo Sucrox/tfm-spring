@@ -1,8 +1,11 @@
 package es.upm.miw.companyds.tfm_spring.persistence;
 
+import es.upm.miw.companyds.tfm_spring.api.dto.AddressDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
+import es.upm.miw.companyds.tfm_spring.persistence.model.Address;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
 import es.upm.miw.companyds.tfm_spring.persistence.model.User;
+import es.upm.miw.companyds.tfm_spring.persistence.repository.AddressRepository;
 import es.upm.miw.companyds.tfm_spring.persistence.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,10 @@ public class UserSeederService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
+
 
     public void seedDatabase() {
         if (userRepository.count() == 0) {
@@ -67,6 +74,35 @@ public class UserSeederService {
                     .map(UserDto::toUser)
                     .toList();
             this.userRepository.saveAll(users);
+
+            LogManager.getLogger(this.getClass()).warn("------- Address Initial Load -----------");
+
+            AddressDto[] addressesDtos = {
+                    AddressDto.builder()
+                            .street("Main St")
+                            .number("123")
+                            .floor("2")
+                            .door("A")
+                            .postalCode("28001")
+                            .city("Madrid")
+                            .build(),
+
+                    AddressDto.builder()
+                            .street("First Ave")
+                            .number("456")
+                            .floor("3")
+                            .door("B")
+                            .postalCode("28002")
+                            .city("Madrid")
+                            .build()
+            };
+            List<Address> addresses = Arrays.stream(addressesDtos)
+                    .map(AddressDto::toAddress)
+                    .toList();
+            addresses.getFirst().setUser(users.getFirst());
+            addresses.get(1).setUser(users.get(1));
+            this.addressRepository.saveAll(addresses);
+
         }
     }
 
