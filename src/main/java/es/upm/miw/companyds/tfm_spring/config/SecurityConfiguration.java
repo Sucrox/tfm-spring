@@ -51,7 +51,6 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // CSRF está deshabilitado porque usamos JWT y no gestionamos sesiones basadas en cookies.
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
