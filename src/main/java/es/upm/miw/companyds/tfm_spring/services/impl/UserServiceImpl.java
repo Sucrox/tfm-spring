@@ -97,8 +97,14 @@ public class UserServiceImpl implements UserService {
         Optional.ofNullable(updateUserDto.getFamilyName()).filter(name -> !name.isEmpty()).ifPresent(user::setFamilyName);
 
         Optional.ofNullable(updateUserDto.getEmail())
-                .filter(email -> !email.isEmpty() && isValidEmail(email))
-                .ifPresentOrElse(user::setEmail, () -> { throw new ConflictException("Provided email is not valid"); });
+                .filter(email -> !email.isEmpty())
+                .ifPresent(email -> {
+                    if (isValidEmail(email)) {
+                        user.setEmail(email);
+                    } else {
+                        throw new ConflictException("Provided email is not valid");
+                    }
+                });
         return UserDto.ofUser(this.userRepository.save(user));
     }
 
