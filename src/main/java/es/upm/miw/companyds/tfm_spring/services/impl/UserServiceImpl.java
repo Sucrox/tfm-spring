@@ -17,6 +17,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static es.upm.miw.companyds.tfm_spring.api.dto.validation.Validations.isValidEmail;
@@ -91,21 +92,13 @@ public class UserServiceImpl implements UserService {
         this.authorizationService.checkIfAuthorized(role,id);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User does not exist"));
-        if (updateUserDto.getFirstName() != null && !updateUserDto.getFirstName().isEmpty()) {
-            user.setFirstName(updateUserDto.getFirstName());
-        }
 
-        if (updateUserDto.getFamilyName() != null && !updateUserDto.getFamilyName().isEmpty()) {
-            user.setFamilyName(updateUserDto.getFamilyName());
-        }
+        Optional.ofNullable(updateUserDto.getFirstName()).filter(name -> !name.isEmpty()).ifPresent(user::setFirstName);
+        Optional.ofNullable(updateUserDto.getFamilyName()).filter(name -> !name.isEmpty()).ifPresent(user::setFamilyName);
 
-        if (updateUserDto.getEmail() != null && !updateUserDto.getEmail().isEmpty()) {
-            if (isValidEmail(updateUserDto.getEmail())) {
-                user.setEmail(updateUserDto.getEmail());
-            } else {
-                throw new ConflictException("Provided email is not valid");
-            }
-        }
+        Optional.ofNullable(updateUserDto.getEmail())
+                .filter(email -> !email.isEmpty() && isValidEmail(email))
+                .ifPresentOrElse(user::setEmail, () -> { throw new ConflictException("Provided email is not valid"); });
         return UserDto.ofUser(this.userRepository.save(user));
     }
 

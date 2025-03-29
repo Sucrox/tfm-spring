@@ -10,6 +10,7 @@ import es.upm.miw.companyds.tfm_spring.services.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -37,29 +38,12 @@ public class AddressServiceImpl implements AddressService {
         Address address = addressRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Address does not exist"));
 
-        if (updateAddressDto.getStreet() != null && !updateAddressDto.getStreet().isEmpty()) {
-            address.setStreet(updateAddressDto.getStreet());
-        }
-
-        if (updateAddressDto.getNumber() != null && !updateAddressDto.getNumber().isEmpty()) {
-            address.setNumber(updateAddressDto.getNumber());
-        }
-
-        if (updateAddressDto.getFloor() != null && !updateAddressDto.getFloor().isEmpty()) {
-            address.setFloor(updateAddressDto.getFloor());
-        }
-
-        if (updateAddressDto.getDoor() != null && !updateAddressDto.getDoor().isEmpty()) {
-            address.setDoor(updateAddressDto.getDoor());
-        }
-
-        if (updateAddressDto.getPostalCode() != null && !updateAddressDto.getPostalCode().isEmpty()) {
-            address.setPostalCode(updateAddressDto.getPostalCode());
-        }
-
-        if (updateAddressDto.getCity() != null && !updateAddressDto.getCity().isEmpty()) {
-            address.setCity(updateAddressDto.getCity());
-        }
+        Optional.ofNullable(updateAddressDto.getStreet()).filter(s -> !s.isEmpty()).ifPresent(address::setStreet);
+        Optional.ofNullable(updateAddressDto.getNumber()).filter(s -> !s.isEmpty()).ifPresent(address::setNumber);
+        Optional.ofNullable(updateAddressDto.getFloor()).filter(s -> !s.isEmpty()).ifPresent(address::setFloor);
+        Optional.ofNullable(updateAddressDto.getDoor()).filter(s -> !s.isEmpty()).ifPresent(address::setDoor);
+        Optional.ofNullable(updateAddressDto.getPostalCode()).filter(s -> !s.isEmpty()).ifPresent(address::setPostalCode);
+        Optional.ofNullable(updateAddressDto.getCity()).filter(s -> !s.isEmpty()).ifPresent(address::setCity);
 
         return AddressDto.ofAddress(this.addressRepository.save(address));
     }

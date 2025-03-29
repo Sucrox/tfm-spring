@@ -84,7 +84,6 @@ public class ApiExceptionHandler {
     })
     @ResponseBody
     public ErrorMessage exception(Exception exception) { //WARNING. It is caught for unforeseen cases.The error must be properly handled or caught.
-        exception.printStackTrace(); //WARNING. ONLY on develop. it helps to debugging but it is a code smell
         return new ErrorMessage(exception, HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
