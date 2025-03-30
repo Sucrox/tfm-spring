@@ -75,8 +75,8 @@ public class ProductControllerIT {
                 .quantity(306)
                 .build();
 
-        assertTrue(this.productRepository.findByBarcode("7778889990001").isPresent());
-        Product product = this.productRepository.findByBarcode("7778889990001").get();
+        assertTrue(this.productRepository.findByBarcode("1112223334445").isPresent());
+        Product product = this.productRepository.findByBarcode("1112223334445").get();
 
         HttpEntity<UpdateProductDto> request = new HttpEntity<>(updateProductDto, headers);
 
