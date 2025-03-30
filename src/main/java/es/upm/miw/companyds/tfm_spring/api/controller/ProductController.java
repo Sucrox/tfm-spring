@@ -33,7 +33,7 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<Stream<ProductDto>> getAllProducts() {
-        return ResponseEntity.ok(this.productService.getAllProducts(this.authorizationService.extractRoleClaims()));
+        return ResponseEntity.ok(this.productService.getAllProducts());
     }
 
     @GetMapping(PRODUCT_BARCODE)

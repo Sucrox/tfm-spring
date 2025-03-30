@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public interface ProductService {
 
-    Stream<ProductDto> getAllProducts(Role role);
+    Stream<ProductDto> getAllProducts();
     ProductDto getProductByBarcode(String barcode, Role role);
     ProductDto createProduct(ProductDto productDto, Role role);
     ProductDto updateProduct(String barcode, UpdateProductDto updateProductDto, Role role);

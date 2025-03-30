@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Stream<ProductDto> getAllProducts(Role role) {
+    public Stream<ProductDto> getAllProducts() {
         return productRepository.findAll().stream().map(ProductDto::ofProduct);
     }
 

@@ -85,17 +85,13 @@ public class UserServiceIT {
     void testLoginUser_403Forbidden() {
         LoginDto loginDto = LoginDto.builder().email("juan.perez@example.com")
                 .password("wrongpassword").build();
-        Exception exception = assertThrows(ForbiddenException.class, () -> {
-            userService.login(loginDto);
-        });
+        assertThrows(ForbiddenException.class, () -> userService.login(loginDto));
     }
     @Test
     void testLoginUser_404NotFound() {
         LoginDto loginDto = LoginDto.builder().email("notFound@example.com")
                 .password("wrongpassword").build();
-        Exception exception = assertThrows(NotFoundException.class, () -> {
-            userService.login(loginDto);
-        });
+        assertThrows(NotFoundException.class, () -> userService.login(loginDto));
     }
     @Test
     void testGetUserCorrectId() {
@@ -123,7 +119,6 @@ public class UserServiceIT {
     @Test
     void testGetUsersForbidden() {
         assertThrows(ForbiddenException.class, () -> userService.getAllUsers(Role.CUSTOMER));
-
     }
 
     @Test

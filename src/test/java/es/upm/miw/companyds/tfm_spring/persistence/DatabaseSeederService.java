@@ -6,22 +6,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class DatabaseSeederService {
 
-    private final UserSeederService userSeederService;
+    private final EntitySeederService entitySeederService;
 
     @Autowired
     public DatabaseSeederService(
-            UserSeederService userSeederService
+            EntitySeederService entitySeederService
     ) {
-        this.userSeederService = userSeederService;
+        this.entitySeederService = entitySeederService;
         this.seedDatabase();
     }
 
     public void seedDatabase() {
-        this.userSeederService.seedDatabase();
+        this.entitySeederService.seedDatabase();
     }
 
     public void deleteAll() {
-        this.userSeederService.deleteAll();
+        this.entitySeederService.deleteAll();
         this.seedDatabase();
     }
 
