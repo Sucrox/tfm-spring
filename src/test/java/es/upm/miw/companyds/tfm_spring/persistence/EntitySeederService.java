@@ -1,27 +1,29 @@
 package es.upm.miw.companyds.tfm_spring.persistence;
 
 import es.upm.miw.companyds.tfm_spring.api.dto.AddressDto;
+import es.upm.miw.companyds.tfm_spring.api.dto.ProductDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
-import es.upm.miw.companyds.tfm_spring.persistence.model.Address;
-import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
-import es.upm.miw.companyds.tfm_spring.persistence.model.User;
+import es.upm.miw.companyds.tfm_spring.persistence.model.*;
 import es.upm.miw.companyds.tfm_spring.persistence.repository.AddressRepository;
+import es.upm.miw.companyds.tfm_spring.persistence.repository.ProductRepository;
 import es.upm.miw.companyds.tfm_spring.persistence.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class UserSeederService {
+public class EntitySeederService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
 
     public void seedDatabase() {
@@ -103,6 +105,47 @@ public class UserSeederService {
             addresses.get(1).setUser(users.get(1));
             this.addressRepository.saveAll(addresses);
 
+            LogManager.getLogger(this.getClass()).warn("------- Products Initial Load -----------");
+            ProductDto[] productDtos = {
+                    ProductDto.builder()
+                            .name("Golden Apple")
+                            .barcode("1112223334445")
+                            .price(BigDecimal.valueOf(2.99))
+                            .quantity(100)
+                            .category(Category.FRUITS)
+                            .description("Fresh and juicy golden apple, rich in vitamins")
+                            .build(),
+
+                    ProductDto.builder()
+                            .name("Cheddar Cheese")
+                            .barcode("5556667778889")
+                            .price(BigDecimal.valueOf(5.49))
+                            .quantity(30)
+                            .category(Category.DAIRY)
+                            .description("Aged cheddar cheese with rich and creamy flavor")
+                            .build(),
+                    ProductDto.builder()
+                            .name("Whole Bread")
+                            .barcode("7778889990001")
+                            .price(BigDecimal.valueOf(3.49))
+                            .quantity(50)
+                            .category(Category.BAKERY)
+                            .description("Freshly baked whole wheat bread, high in fiber and nutrients")
+                            .build(),
+                    ProductDto.builder()
+                            .name("Normal Bread")
+                            .barcode("7778889990000")
+                            .price(BigDecimal.valueOf(3.49))
+                            .quantity(50)
+                            .category(Category.BAKERY)
+                            .description("Freshly baked wheat bread, high in fiber and nutrients")
+                            .build()
+            };
+
+            List<Product> products = Arrays.stream(productDtos)
+                    .map(ProductDto::toProduct)
+                    .toList();
+            this.productRepository.saveAll(products);
         }
     }
 

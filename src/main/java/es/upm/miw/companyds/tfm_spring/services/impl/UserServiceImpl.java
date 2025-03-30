@@ -78,6 +78,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundException("There's no user for id:" + id));
     }
 
+    @Transactional
     @Override
     public UserDto createUser(UserDto userDto, Role role) {
         this.authorizationService.checkIfAuthorized(role);
@@ -87,6 +88,7 @@ public class UserServiceImpl implements UserService {
         return UserDto.ofUser(this.userRepository.save(userDto.toUser()));
     }
 
+    @Transactional
     @Override
     public UserDto updateUser(Integer id, UpdateUserDto updateUserDto, Role role) {
         this.authorizationService.checkIfAuthorized(role,id);
@@ -108,6 +110,7 @@ public class UserServiceImpl implements UserService {
         return UserDto.ofUser(this.userRepository.save(user));
     }
 
+    @Transactional
     @Override
     public void deleteUser(Integer id, Role role) {
         this.authorizationService.checkIfAuthorized(role);

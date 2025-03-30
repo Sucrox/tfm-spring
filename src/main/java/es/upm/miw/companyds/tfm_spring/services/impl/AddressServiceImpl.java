@@ -7,6 +7,7 @@ import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
 import es.upm.miw.companyds.tfm_spring.persistence.repository.AddressRepository;
 import es.upm.miw.companyds.tfm_spring.services.AddressService;
 import es.upm.miw.companyds.tfm_spring.services.exceptions.NotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,7 @@ public class AddressServiceImpl implements AddressService {
         return addressRepository.findAllByUserId(userId).stream().map(AddressDto::ofAddress);
     }
 
+    @Transactional
     @Override
     public AddressDto updateAddress(Integer id, UpdateAddressDto updateAddressDto, Role role) {
         this.authorizationService.checkIfAuthorized(role,id);
