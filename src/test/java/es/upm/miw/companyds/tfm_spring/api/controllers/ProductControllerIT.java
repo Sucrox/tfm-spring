@@ -2,8 +2,6 @@ package es.upm.miw.companyds.tfm_spring.api.controllers;
 
 import es.upm.miw.companyds.tfm_spring.api.dto.*;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Category;
-import es.upm.miw.companyds.tfm_spring.persistence.model.Product;
-import es.upm.miw.companyds.tfm_spring.persistence.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -14,7 +12,7 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ApiTestConfig
-public class ProductControllerIT {
+class ProductControllerIT {
 
     @Autowired
     private TestRestTemplate testRestTemplate;

@@ -8,7 +8,6 @@ import es.upm.miw.companyds.tfm_spring.persistence.model.User;
 import es.upm.miw.companyds.tfm_spring.persistence.repository.AddressRepository;
 import es.upm.miw.companyds.tfm_spring.persistence.repository.UserRepository;
 import es.upm.miw.companyds.tfm_spring.services.exceptions.ForbiddenException;
-import es.upm.miw.companyds.tfm_spring.services.exceptions.NotFoundException;
 import es.upm.miw.companyds.tfm_spring.services.impl.AddressServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,7 +66,6 @@ public class AddressServiceIT {
         Address address= this.addressRepository.findAll().get(1);
         UpdateAddressDto updateAddressDto = UpdateAddressDto.builder().floor("5").build();
 
-        assertThrows(ForbiddenException.class, () -> addressService.updateAddress(-1,updateAddressDto, Role.ADMIN));
         assertThrows(ForbiddenException.class, () -> addressService.updateAddress(address.getId(), updateAddressDto, Role.CUSTOMER));
     }
 

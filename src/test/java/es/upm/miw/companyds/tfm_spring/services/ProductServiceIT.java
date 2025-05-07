@@ -4,7 +4,6 @@ import es.upm.miw.companyds.tfm_spring.TestConfig;
 import es.upm.miw.companyds.tfm_spring.api.dto.ProductDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UpdateProductDto;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Category;
-import es.upm.miw.companyds.tfm_spring.persistence.model.Product;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
 import es.upm.miw.companyds.tfm_spring.persistence.repository.ProductRepository;
 import es.upm.miw.companyds.tfm_spring.services.exceptions.ConflictException;

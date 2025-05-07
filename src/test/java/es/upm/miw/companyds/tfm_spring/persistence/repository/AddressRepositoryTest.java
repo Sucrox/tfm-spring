@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @TestConfig
-public class AddressRepositoryTest {
+class AddressRepositoryTest {
 
     @Autowired
     private AddressRepository addressRepository;
@@ -20,6 +20,6 @@ public class AddressRepositoryTest {
     void findAllByUserPhone() {
         List<Address> list = this.addressRepository.findAllByUserPhone("677222333");
         assertNotNull(list);
-        assertEquals(list.size(), 1);
+        assertEquals(1,list.size());
     }
 }

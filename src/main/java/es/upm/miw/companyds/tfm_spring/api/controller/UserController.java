@@ -40,7 +40,7 @@ public class UserController {
 
     @SecurityRequirement(name = "basicAuth")
     @PostMapping(value = LOGIN)
-    public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<TokenDto> loginUser(@RequestBody LoginDto loginDto) {
         TokenDto token = new TokenDto(userService.login(loginDto));
         return ResponseEntity.ok(token);
     }
