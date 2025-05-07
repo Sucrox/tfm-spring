@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestConfig
-public class UserServiceIT {
+class UserServiceIT {
 
     @Autowired
     private UserRepository userRepository;

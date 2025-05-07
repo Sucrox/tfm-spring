@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestConfig
-public class AddressServiceIT {
+class AddressServiceIT {
 
     @Autowired
     private AddressRepository addressRepository;
