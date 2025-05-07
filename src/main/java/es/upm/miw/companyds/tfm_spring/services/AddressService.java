@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public interface AddressService {
 
-    Stream<AddressDto> getAddressesByUserId(Integer userId, Role role);
-    AddressDto updateAddress(Integer id, UpdateAddressDto updateAddressDto, Role role);
+    Stream<AddressDto> getAddressesByUserPhone(String userPhone, Role role);
 
+    AddressDto updateAddress(Integer id, UpdateAddressDto updateAddressDto, Role role);
 }

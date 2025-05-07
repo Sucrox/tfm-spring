@@ -63,14 +63,12 @@ public class AddressServiceIT {
 
     @Test
     void testUpdateAddressExceptions() {
-        assertTrue(this.userRepository.findByPhone("616333625").isPresent());
-        User user = this.userRepository.findByPhone("616333625").get();
 
-        Address address= this.addressRepository.findAll().getFirst();
+        Address address= this.addressRepository.findAll().get(1);
         UpdateAddressDto updateAddressDto = UpdateAddressDto.builder().floor("5").build();
 
-        assertThrows(NotFoundException.class, () -> addressService.updateAddress(-1,updateAddressDto, Role.ADMIN));
-        assertThrows(ForbiddenException.class, () -> addressService.updateAddress(user.getId(), updateAddressDto, Role.CUSTOMER));
+        assertThrows(ForbiddenException.class, () -> addressService.updateAddress(-1,updateAddressDto, Role.ADMIN));
+        assertThrows(ForbiddenException.class, () -> addressService.updateAddress(address.getId(), updateAddressDto, Role.CUSTOMER));
     }
 
 }

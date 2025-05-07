@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto getProductByBarcode(String barcode, Role role) {
+    public ProductDto getProductByBarcode(String barcode) {
         return productRepository.findByBarcode(barcode).map(ProductDto::ofProduct)
                 .orElseThrow(() -> new NotFoundException("There's no product with barcode:" + barcode));
     }

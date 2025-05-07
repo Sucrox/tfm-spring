@@ -4,8 +4,6 @@ import es.upm.miw.companyds.tfm_spring.api.dto.LoginDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.TokenDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UpdateUserDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
-import es.upm.miw.companyds.tfm_spring.persistence.model.User;
-import es.upm.miw.companyds.tfm_spring.persistence.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -18,9 +16,6 @@ public class UserControllerIT {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Test
     void testRegisterUser() {
@@ -61,14 +56,11 @@ public class UserControllerIT {
     }
 
     @Test
-    void testGetUserById() {
+    void testGetUserByPhone() {
         HttpHeaders headers = authenticateUser();
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
-        assertTrue(this.userRepository.findByPhone("666111222").isPresent());
-        User user = this.userRepository.findByPhone("666111222").get();
-
-        ResponseEntity<UserDto> response = testRestTemplate.exchange("/users/" + user.getId(), HttpMethod.GET, request, UserDto.class);
+        ResponseEntity<UserDto> response = testRestTemplate.exchange("/users/" + "666111222", HttpMethod.GET, request, UserDto.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -101,12 +93,9 @@ public class UserControllerIT {
                 .familyName("Update")
                 .build();
 
-        assertTrue(this.userRepository.findByPhone("616333625").isPresent());
-        User user = this.userRepository.findByPhone("616333625").get();
-
         HttpEntity<UpdateUserDto> request = new HttpEntity<>(updateUserDto, headers);
 
-        ResponseEntity<UserDto> response = testRestTemplate.exchange("/users/" + user.getId(), HttpMethod.PATCH, request, UserDto.class);
+        ResponseEntity<UserDto> response = testRestTemplate.exchange("/users/" + "616333625", HttpMethod.PATCH, request, UserDto.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -118,10 +107,7 @@ public class UserControllerIT {
 
         HttpEntity<UpdateUserDto> request = new HttpEntity<>( headers);
 
-        assertTrue(this.userRepository.findByPhone("616312333").isPresent());
-        User user = this.userRepository.findByPhone("616312333").get();
-
-        ResponseEntity<Void> response = testRestTemplate.exchange("/users/" + user.getId(), HttpMethod.DELETE, request, Void.class);
+        ResponseEntity<Void> response = testRestTemplate.exchange("/users/" + "616312333", HttpMethod.DELETE, request, Void.class);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }

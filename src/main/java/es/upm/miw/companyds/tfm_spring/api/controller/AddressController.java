@@ -19,7 +19,7 @@ public class AddressController {
 
     public static final String ADDRESS = "/address";
     public static final String USER = "/user";
-    public static final String USER_ID = "/{user_id}";
+    public static final String USER_PHONE = "/{user_phone}";
     public static final String ADDRESS_ID = "/{id}";
 
     private final AddressServiceImpl addressService;
@@ -33,9 +33,9 @@ public class AddressController {
 
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("authenticated")
-    @GetMapping(USER+USER_ID)
-    public ResponseEntity<Stream<AddressDto>> getAddressesByUserId(@PathVariable Integer user_id) {
-        return ResponseEntity.ok(this.addressService.getAddressesByUserId(user_id,this.authorizationService.extractRoleClaims()));
+    @GetMapping(USER+USER_PHONE)
+    public ResponseEntity<Stream<AddressDto>> getAddressesByUserPhone(@PathVariable String user_phone) {
+        return ResponseEntity.ok(this.addressService.getAddressesByUserPhone(user_phone,this.authorizationService.extractRoleClaims()));
     }
 
 
@@ -45,6 +45,5 @@ public class AddressController {
     public ResponseEntity<AddressDto> updateAddress(@PathVariable Integer id, @RequestBody UpdateAddressDto updateAddressDto) {
         return ResponseEntity.ok(this.addressService.updateAddress(id, updateAddressDto, this.authorizationService.extractRoleClaims()));
     }
-
 
 }

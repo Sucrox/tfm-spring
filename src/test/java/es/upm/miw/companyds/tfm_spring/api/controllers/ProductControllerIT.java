@@ -19,9 +19,6 @@ public class ProductControllerIT {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-    @Autowired
-    private ProductRepository productRepository;
-
     @Test
     void testGetAllProducts() {
         HttpHeaders headers = authenticateUser();
@@ -39,10 +36,7 @@ public class ProductControllerIT {
         HttpHeaders headers = authenticateUser();
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
-        assertTrue(this.productRepository.findByBarcode("5556667778889").isPresent());
-        Product product = this.productRepository.findByBarcode("5556667778889").get();
-
-        ResponseEntity<ProductDto> response = testRestTemplate.exchange("/products/" + product.getBarcode(), HttpMethod.GET, request, ProductDto.class);
+        ResponseEntity<ProductDto> response = testRestTemplate.exchange("/products/" + "5556667778889", HttpMethod.GET, request, ProductDto.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -75,12 +69,9 @@ public class ProductControllerIT {
                 .quantity(306)
                 .build();
 
-        assertTrue(this.productRepository.findByBarcode("1112223334445").isPresent());
-        Product product = this.productRepository.findByBarcode("1112223334445").get();
-
         HttpEntity<UpdateProductDto> request = new HttpEntity<>(updateProductDto, headers);
 
-        ResponseEntity<ProductDto> response = testRestTemplate.exchange("/products/" + product.getBarcode(), HttpMethod.PATCH, request, ProductDto.class);
+        ResponseEntity<ProductDto> response = testRestTemplate.exchange("/products/" + "1112223334445", HttpMethod.PATCH, request, ProductDto.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -92,10 +83,7 @@ public class ProductControllerIT {
 
         HttpEntity<UpdateUserDto> request = new HttpEntity<>( headers);
 
-        assertTrue(this.productRepository.findByBarcode("7778889990000").isPresent());
-        Product product = this.productRepository.findByBarcode("7778889990000").get();
-
-        ResponseEntity<Void> response = testRestTemplate.exchange("/products/" + product.getBarcode(), HttpMethod.DELETE, request, Void.class);
+        ResponseEntity<Void> response = testRestTemplate.exchange("/products/" + "7778889990000", HttpMethod.DELETE, request, Void.class);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
