@@ -27,7 +27,6 @@ public class Address {
     private String city;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_phone", referencedColumnName = "phone", nullable = false)
     private User user;
-
 }

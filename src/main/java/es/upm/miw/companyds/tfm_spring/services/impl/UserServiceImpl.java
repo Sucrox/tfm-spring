@@ -72,11 +72,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserById(Integer id, Role role) {
-        this.authorizationService.checkIfAuthorized(role,id);
-        return userRepository.findById(id).map(UserDto::ofUser)
-                .orElseThrow(() -> new NotFoundException("There's no user for id:" + id));
+    public UserDto getUserByPhone(String phone, Role role) {
+        this.authorizationService.checkIfAuthorized(role,phone);
+        return userRepository.findByPhone(phone).map(UserDto::ofUser)
+                .orElseThrow(() -> new NotFoundException("There's no user for phone:" + phone));
     }
+
 
     @Transactional
     @Override
@@ -90,9 +91,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDto updateUser(Integer id, UpdateUserDto updateUserDto, Role role) {
-        this.authorizationService.checkIfAuthorized(role,id);
-        User user = userRepository.findById(id)
+    public UserDto updateUserByPhone(String phone, UpdateUserDto updateUserDto, Role role) {
+        this.authorizationService.checkIfAuthorized(role,phone);
+        User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new NotFoundException("User does not exist"));
 
         Optional.ofNullable(updateUserDto.getFirstName()).filter(name -> !name.isEmpty()).ifPresent(user::setFirstName);
@@ -112,10 +113,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void deleteUser(Integer id, Role role) {
+    public void deleteUserByPhone(String phone, Role role) {
         this.authorizationService.checkIfAuthorized(role);
-        userRepository.findById(id)
+        userRepository.findByPhone(phone)
                 .orElseThrow(() -> new NotFoundException("User does not exist"));
-        userRepository.deleteById(id);
+        userRepository.deleteByPhone(phone);
     }
 }

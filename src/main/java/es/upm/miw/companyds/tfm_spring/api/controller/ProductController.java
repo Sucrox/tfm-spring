@@ -38,7 +38,7 @@ public class ProductController {
 
     @GetMapping(PRODUCT_BARCODE)
     public ResponseEntity<ProductDto> getProduct(@PathVariable String barcode) {
-        return ResponseEntity.ok(this.productService.getProductByBarcode(barcode, this.authorizationService.extractRoleClaims()));
+        return ResponseEntity.ok(this.productService.getProductByBarcode(barcode));
     }
 
     @PostMapping

@@ -21,7 +21,7 @@ public class UserController {
 
     public static final String USERS = "/users";
     public static final String LOGIN = "/login";
-    public static final String USER_ID = "/{id}";
+    public static final String USER_PHONE = "/{phone}";
 
     private final UserServiceImpl userService;
     private final AuthorizationService authorizationService;
@@ -54,9 +54,9 @@ public class UserController {
 
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("authenticated")
-    @GetMapping(USER_ID)
-    public ResponseEntity<UserDto> getUser(@PathVariable Integer id) {
-        return ResponseEntity.ok(this.userService.getUserById(id, this.authorizationService.extractRoleClaims()));
+    @GetMapping(USER_PHONE)
+    public ResponseEntity<UserDto> getUser(@PathVariable String phone) {
+        return ResponseEntity.ok(this.userService.getUserByPhone(phone, this.authorizationService.extractRoleClaims()));
     }
 
     @SecurityRequirement(name = "bearerAuth")
@@ -69,16 +69,16 @@ public class UserController {
 
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("authenticated")
-    @PatchMapping(USER_ID)
-    public ResponseEntity<UserDto> updateUser(@PathVariable Integer id, @RequestBody UpdateUserDto updateUserDto) {
-        return ResponseEntity.ok(this.userService.updateUser(id, updateUserDto, this.authorizationService.extractRoleClaims()));
+    @PatchMapping(USER_PHONE)
+    public ResponseEntity<UserDto> updateUser(@PathVariable String phone, @RequestBody UpdateUserDto updateUserDto) {
+        return ResponseEntity.ok(this.userService.updateUserByPhone(phone, updateUserDto, this.authorizationService.extractRoleClaims()));
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("authenticated")
-    @DeleteMapping(USER_ID)
-    public  ResponseEntity<Void> deleteUSer(@PathVariable Integer id) {
-        this.userService.deleteUser(id, this.authorizationService.extractRoleClaims());
+    @DeleteMapping(USER_PHONE)
+    public  ResponseEntity<Void> deleteUSer(@PathVariable String phone) {
+        this.userService.deleteUserByPhone(phone, this.authorizationService.extractRoleClaims());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -20,7 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -66,9 +65,8 @@ public class UserServiceIT {
 
         userService.registerUser(userDto);
 
-        Optional<User> savedUserOpt = userRepository.findByPhone("666000666");
-        assertTrue(savedUserOpt.isPresent());
-        User savedUser = savedUserOpt.get();
+        UserDto savedUser = userService.getUserByPhone("666000666", Role.ADMIN);
+        assertNotNull(savedUser);
         assertEquals("666000666", savedUser.getPhone());
         assertEquals(Role.CUSTOMER, savedUser.getRole());
     }
@@ -94,10 +92,8 @@ public class UserServiceIT {
         assertThrows(NotFoundException.class, () -> userService.login(loginDto));
     }
     @Test
-    void testGetUserCorrectId() {
-        User user = userRepository.findByPhone("666111222")
-                .orElseThrow(() -> new RuntimeException("Test user not found"));
-        UserDto userDto = userService.getUserById(user.getId(), user.getRole());
+    void testGetUserCorrectPhone() {
+        UserDto userDto = userService.getUserByPhone("666111222",Role.ADMIN);
 
         assertNotNull(userDto);
         assertEquals("666111222", userDto.getPhone());
@@ -105,8 +101,8 @@ public class UserServiceIT {
     }
 
     @Test
-    void testGetUserWrongId() {
-        assertThrows(NotFoundException.class, () -> userService.getUserById(-1, Role.ADMIN));
+    void testGetUserWrongPhone() {
+        assertThrows(NotFoundException.class, () -> userService.getUserByPhone("-1", Role.ADMIN));
     }
 
     @Test
@@ -151,41 +147,35 @@ public class UserServiceIT {
 
     @Test
     void testUpdateUser() {
-        assertTrue(this.userRepository.findByPhone("616333625").isPresent());
-        User user = this.userRepository.findByPhone("616333625").get();
         UpdateUserDto updateUserDto = UpdateUserDto.builder()
                 .firstName("Juan")
                 .familyName("Perez")
                 .email("newEmail@example.com")
                 .build();
-        assertEquals(updateUserDto.getEmail(), userService.updateUser(user.getId(),updateUserDto, Role.ADMIN).getEmail());
+        assertEquals(updateUserDto.getEmail(), userService.updateUserByPhone("616333625",updateUserDto, Role.ADMIN).getEmail());
     }
 
     @Test
     void testUpdateUserExceptions() {
-        assertTrue(this.userRepository.findByPhone("616333625").isPresent());
-        User user = this.userRepository.findByPhone("616333625").get();
         UpdateUserDto updateUserDto = UpdateUserDto.builder()
                 .firstName("Juan")
                 .familyName("Perez")
                 .email("lalala")
                 .build();
-        assertThrows(NotFoundException.class, () -> userService.updateUser(-1,updateUserDto, Role.ADMIN));
-        assertThrows(ConflictException.class, () -> userService.updateUser(user.getId(),updateUserDto, Role.ADMIN));
-        assertThrows(ForbiddenException.class, () -> userService.updateUser(user.getId(), updateUserDto, Role.CUSTOMER));
+        assertThrows(NotFoundException.class, () -> userService.updateUserByPhone("-1",updateUserDto, Role.ADMIN));
+        assertThrows(ConflictException.class, () -> userService.updateUserByPhone("616333625",updateUserDto, Role.ADMIN));
+        assertThrows(ForbiddenException.class, () -> userService.updateUserByPhone("616333625", updateUserDto, Role.CUSTOMER));
     }
 
     @Test
     void testDeleteUser() {
-        assertTrue(this.userRepository.findByPhone("616333999").isPresent());
-        User user = this.userRepository.findByPhone("616333999").get();
-        userService.deleteUser(user.getId(), Role.ADMIN);
-        assertFalse(this.userRepository.findByPhone("616333999").isPresent());
+        userService.deleteUserByPhone("616333999", Role.ADMIN);
+        assertThrows(NotFoundException.class, () -> userService.deleteUserByPhone("616333999", Role.ADMIN));
     }
 
     @Test
     void testDeleteUserExceptions() {
-        assertThrows(NotFoundException.class, () -> userService.deleteUser(-1, Role.ADMIN));
-        assertThrows(ForbiddenException.class, () -> userService.deleteUser(-1, Role.CUSTOMER));
+        assertThrows(NotFoundException.class, () -> userService.deleteUserByPhone("-1", Role.ADMIN));
+        assertThrows(ForbiddenException.class, () -> userService.deleteUserByPhone("-1", Role.CUSTOMER));
     }
 }

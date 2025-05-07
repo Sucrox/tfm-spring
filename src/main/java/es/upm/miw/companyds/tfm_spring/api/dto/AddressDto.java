@@ -18,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddressDto {
+
+    private int id;
     @NotBlank
     private String street;
     @NotBlank
@@ -27,18 +29,20 @@ public class AddressDto {
     @NotBlank
     private String postalCode;
     private String city;
-    @Min(1)
-    private int userId;
+
+    @NotBlank
+    private String userPhone;
 
     public static AddressDto ofAddress(Address address) {
         return AddressDto.builder()
+                .id(address.getId())
                 .street(address.getStreet())
                 .number(address.getNumber())
                 .floor(address.getFloor())
                 .door(address.getDoor())
                 .postalCode(address.getPostalCode())
                 .city(address.getCity())
-                .userId(address.getUser().getId())
+                .userPhone(address.getUser().getPhone())
                 .build();
     }
 

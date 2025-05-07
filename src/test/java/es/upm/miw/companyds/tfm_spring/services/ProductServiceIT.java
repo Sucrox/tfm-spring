@@ -32,17 +32,14 @@ public class ProductServiceIT {
 
     @Test
     void testGetProductCorrectBarcode() {
-        Product product = productRepository.findByBarcode("5556667778889")
-                .orElseThrow(() -> new RuntimeException("Test product not found"));
-        ProductDto productDto = productService.getProductByBarcode(product.getBarcode(), Role.ADMIN);
-
+        ProductDto productDto = productService.getProductByBarcode("5556667778889");
         assertNotNull(productDto);
         assertEquals("Cheddar Cheese", productDto.getName());
     }
 
     @Test
     void testGetProductWrongBarcode() {
-        assertThrows(NotFoundException.class, () -> productService.getProductByBarcode("-1", Role.ADMIN));
+        assertThrows(NotFoundException.class, () -> productService.getProductByBarcode("-1"));
     }
 
     @Test
@@ -67,7 +64,7 @@ public class ProductServiceIT {
 
     @Test
     void testCreateProductExceptions() {
-        ProductDto productDto =             ProductDto.builder()
+        ProductDto productDto = ProductDto.builder()
                 .name("Cheddar Cheese")
                 .barcode("5556667778889")
                 .price(BigDecimal.valueOf(5.49))
@@ -81,31 +78,25 @@ public class ProductServiceIT {
 
     @Test
     void testUpdateProduct() {
-        assertTrue(this.productRepository.findByBarcode("5556667778889").isPresent());
-        Product product = this.productRepository.findByBarcode("5556667778889").get();
         UpdateProductDto updateProductDto = UpdateProductDto.builder()
                 .quantity(96)
                 .build();
-        assertEquals(updateProductDto.getQuantity(), productService.updateProduct(product.getBarcode(),updateProductDto, Role.ADMIN).getQuantity());
+        assertEquals(updateProductDto.getQuantity(), productService.updateProduct("5556667778889",updateProductDto, Role.ADMIN).getQuantity());
     }
 
     @Test
     void testUpdateProductExceptions() {
-        assertTrue(this.productRepository.findByBarcode("5556667778889").isPresent());
-        Product product = this.productRepository.findByBarcode("5556667778889").get();
         UpdateProductDto updateProductDto = UpdateProductDto.builder()
                 .quantity(96)
                 .build();
         assertThrows(NotFoundException.class, () -> productService.updateProduct("-1",updateProductDto, Role.ADMIN));
-        assertThrows(ForbiddenException.class, () -> productService.updateProduct(product.getBarcode(), updateProductDto, Role.CUSTOMER));
+        assertThrows(ForbiddenException.class, () -> productService.updateProduct("5556667778889", updateProductDto, Role.CUSTOMER));
     }
 
 
     @Test
     void testDeleteProduct() {
-        assertTrue(this.productRepository.findByBarcode("7778889990001").isPresent());
-        Product product = this.productRepository.findByBarcode("7778889990001").get();
-        productService.deleteProduct(product.getBarcode(), Role.ADMIN);
+        productService.deleteProduct("7778889990001", Role.ADMIN);
         assertFalse(this.productRepository.findByBarcode("7778889990001").isPresent());
     }
 

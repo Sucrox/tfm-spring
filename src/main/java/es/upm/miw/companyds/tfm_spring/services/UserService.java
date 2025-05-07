@@ -16,13 +16,11 @@ public interface UserService {
 
     Stream<UserDto> getAllUsers(Role role);
 
-    UserDto getUserById(Integer id, Role role);
+    UserDto getUserByPhone(String phone, Role role);
 
     UserDto createUser(UserDto user, Role role);
 
-    UserDto updateUser(Integer id, UpdateUserDto updateUserDto, Role role);
+    UserDto updateUserByPhone(String phone, UpdateUserDto updateUserDto, Role role);
 
-    void deleteUser(Integer id, Role role);
-
-
+    void deleteUserByPhone(String phone, Role role);
 }

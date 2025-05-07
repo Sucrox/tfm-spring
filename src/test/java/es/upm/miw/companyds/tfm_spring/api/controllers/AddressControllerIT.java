@@ -2,9 +2,7 @@ package es.upm.miw.companyds.tfm_spring.api.controllers;
 
 import es.upm.miw.companyds.tfm_spring.api.dto.*;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Address;
-import es.upm.miw.companyds.tfm_spring.persistence.model.User;
 import es.upm.miw.companyds.tfm_spring.persistence.repository.AddressRepository;
-import es.upm.miw.companyds.tfm_spring.persistence.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -20,18 +18,14 @@ public class AddressControllerIT {
 
     @Autowired
     private AddressRepository addressRepository;
-    @Autowired
-    private UserRepository userRepository;
+
 
     @Test
-    void testGetAddressesById() {
+    void testGetAddressesByUserPhone() {
         HttpHeaders headers = authenticateUser();
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
-        assertTrue(this.userRepository.findByPhone("677222333").isPresent());
-        User user = this.userRepository.findByPhone("677222333").get();
-
-        ResponseEntity<AddressDto[]> response = testRestTemplate.exchange("/address/user/" + user.getId(), HttpMethod.GET, request, AddressDto[].class);
+        ResponseEntity<AddressDto[]> response = testRestTemplate.exchange("/address/user/" + "677222333", HttpMethod.GET, request, AddressDto[].class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
