@@ -25,6 +25,7 @@ import java.util.UUID;
 public class UserDto {
     @NotBlank
     @Pattern(regexp = Validations.VALID_PHONE)
+    @Schema(example = "+34 652 01 47 96")
     private String phone;
     @NotBlank
     private String firstName;

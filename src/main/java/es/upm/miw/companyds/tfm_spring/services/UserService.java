@@ -12,7 +12,7 @@ public interface UserService {
 
     void registerUser(@Valid UserDto user);
 
-    String login(LoginDto loginDto);
+    UserDto login(LoginDto loginDto);
 
     Stream<UserDto> getAllUsers(Role role);
 

@@ -89,7 +89,7 @@ class ProductControllerIT {
 
     private HttpHeaders authenticateUser() {
         LoginDto loginDto = LoginDto.builder().email("juan.perez@example.com").password("password123").build();
-        ResponseEntity<TokenDto> response = testRestTemplate.postForEntity("/users/login", loginDto, TokenDto.class);
+        ResponseEntity<LoginResponseDto> response = testRestTemplate.postForEntity("/users/login", loginDto, LoginResponseDto.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());

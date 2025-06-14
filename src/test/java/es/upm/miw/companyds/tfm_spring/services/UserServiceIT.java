@@ -2,7 +2,6 @@ package es.upm.miw.companyds.tfm_spring.services;
 
 import es.upm.miw.companyds.tfm_spring.TestConfig;
 import es.upm.miw.companyds.tfm_spring.api.dto.LoginDto;
-import es.upm.miw.companyds.tfm_spring.api.dto.TokenDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UpdateUserDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
@@ -76,8 +75,8 @@ class UserServiceIT {
         LoginDto loginDto = LoginDto.builder().email("juan.perez@example.com")
                 .password("password123").build();
 
-        TokenDto token= new TokenDto(userService.login(loginDto));
-        assertNotNull(token);
+        UserDto user= userService.login(loginDto);
+        assertNotNull(user);
     }
     @Test
     void testLoginUser_403Forbidden() {

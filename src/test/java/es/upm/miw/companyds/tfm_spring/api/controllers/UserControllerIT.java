@@ -1,9 +1,6 @@
 package es.upm.miw.companyds.tfm_spring.api.controllers;
 
-import es.upm.miw.companyds.tfm_spring.api.dto.LoginDto;
-import es.upm.miw.companyds.tfm_spring.api.dto.TokenDto;
-import es.upm.miw.companyds.tfm_spring.api.dto.UpdateUserDto;
-import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
+import es.upm.miw.companyds.tfm_spring.api.dto.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -39,7 +36,7 @@ class UserControllerIT {
                 .password("password123")
                 .build();
 
-        ResponseEntity<TokenDto> response =testRestTemplate.postForEntity("/users/login", loginDto, TokenDto.class);
+        ResponseEntity<LoginResponseDto> response =testRestTemplate.postForEntity("/users/login", loginDto, LoginResponseDto.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -115,7 +112,7 @@ class UserControllerIT {
 
     private HttpHeaders authenticateUser() {
         LoginDto loginDto = LoginDto.builder().email("juan.perez@example.com").password("password123").build();
-        ResponseEntity<TokenDto> response = testRestTemplate.postForEntity("/users/login", loginDto, TokenDto.class);
+        ResponseEntity<LoginResponseDto> response = testRestTemplate.postForEntity("/users/login", loginDto, LoginResponseDto.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());

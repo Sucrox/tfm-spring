@@ -1,9 +1,7 @@
 package es.upm.miw.companyds.tfm_spring.api.controller;
 
-import es.upm.miw.companyds.tfm_spring.api.dto.LoginDto;
-import es.upm.miw.companyds.tfm_spring.api.dto.TokenDto;
-import es.upm.miw.companyds.tfm_spring.api.dto.UpdateUserDto;
-import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
+import es.upm.miw.companyds.tfm_spring.api.dto.*;
+import es.upm.miw.companyds.tfm_spring.services.JwtService;
 import es.upm.miw.companyds.tfm_spring.services.impl.AuthorizationService;
 import es.upm.miw.companyds.tfm_spring.services.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,11 +23,15 @@ public class UserController {
 
     private final UserServiceImpl userService;
     private final AuthorizationService authorizationService;
+    private final JwtService jwtService;
+
 
     @Autowired
-    public UserController(UserServiceImpl userService, AuthorizationService authorizationService) {
+    public UserController(UserServiceImpl userService, AuthorizationService authorizationService, JwtService jwtService) {
         this.userService = userService;
         this.authorizationService = authorizationService;
+        this.jwtService = jwtService;
+
     }
 
     @PostMapping("/register")
@@ -40,9 +42,10 @@ public class UserController {
 
     @SecurityRequirement(name = "basicAuth")
     @PostMapping(value = LOGIN)
-    public ResponseEntity<TokenDto> loginUser(@RequestBody LoginDto loginDto) {
-        TokenDto token = new TokenDto(userService.login(loginDto));
-        return ResponseEntity.ok(token);
+    public ResponseEntity<LoginResponseDto> loginUser(@RequestBody LoginDto loginDto) {
+        UserDto user = userService.login(loginDto);
+        String token = jwtService.createToken(user.getPhone(), user.getFirstName(), user.getRole().name());
+        return ResponseEntity.ok(new LoginResponseDto(token, user.getPhone()));
     }
 
     @SecurityRequirement(name = "bearerAuth")

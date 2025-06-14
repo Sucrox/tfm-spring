@@ -6,7 +6,6 @@ import es.upm.miw.companyds.tfm_spring.api.dto.UserDto;
 import es.upm.miw.companyds.tfm_spring.persistence.model.Role;
 import es.upm.miw.companyds.tfm_spring.persistence.model.User;
 import es.upm.miw.companyds.tfm_spring.persistence.repository.UserRepository;
-import es.upm.miw.companyds.tfm_spring.services.JwtService;
 import es.upm.miw.companyds.tfm_spring.services.UserService;
 import es.upm.miw.companyds.tfm_spring.services.exceptions.ConflictException;
 import es.upm.miw.companyds.tfm_spring.services.exceptions.ForbiddenException;
@@ -26,15 +25,13 @@ import static es.upm.miw.companyds.tfm_spring.api.dto.validation.Validations.isV
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorizationService authorizationService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder, AuthorizationService authorizationService) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorizationService authorizationService) {
         this.userRepository = userRepository;
-        this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
         this.authorizationService = authorizationService;
     }
@@ -53,13 +50,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(LoginDto loginDto) throws ConflictException {
+    public UserDto login(LoginDto loginDto) throws ConflictException {
         User user =  this.userRepository.findByEmail(loginDto.getEmail())
                 .orElseThrow(() -> new NotFoundException("Unauthorized login"));
         if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
             throw new ForbiddenException("Incorrect fields");
         }
-        return  jwtService.createToken(user.getPhone(), user.getFirstName(), user.getRole().name());
+        return  UserDto.ofUser(user);
     }
 
     @Override
