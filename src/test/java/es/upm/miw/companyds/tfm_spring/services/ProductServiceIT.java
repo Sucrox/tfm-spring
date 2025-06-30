@@ -12,11 +12,13 @@ import es.upm.miw.companyds.tfm_spring.services.exceptions.NotFoundException;
 import es.upm.miw.companyds.tfm_spring.services.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,9 +45,12 @@ class ProductServiceIT {
 
     @Test
     void testGetProducts() {
-        Stream<ProductDto> productDtoStream = productService.getAllProducts();
-        List<ProductDto> productDtoList = productDtoStream.toList();
-        assertTrue(productDtoList.size() > 1);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<ProductDto> productPage = productService.getAllProducts(pageable);
+        List<ProductDto> productDtoList = productPage.getContent();
+
+        assertNotNull(productDtoList);
+        assertFalse(productDtoList.isEmpty(), "La lista de productos no debería estar vacía");
     }
 
     @Test

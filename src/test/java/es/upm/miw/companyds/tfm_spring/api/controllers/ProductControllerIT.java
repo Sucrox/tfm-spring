@@ -5,6 +5,7 @@ import es.upm.miw.companyds.tfm_spring.persistence.model.Category;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 
 import java.math.BigDecimal;
@@ -22,11 +23,18 @@ class ProductControllerIT {
         HttpHeaders headers = authenticateUser();
 
         HttpEntity<Void> request = new HttpEntity<>(headers);
-        ResponseEntity<ProductDto[]> response = testRestTemplate.exchange("/products", HttpMethod.GET, request, ProductDto[].class);
+
+        ResponseEntity<PagedResponse<ProductDto>> response = testRestTemplate.exchange(
+                "/products",
+                HttpMethod.GET,
+                request,
+                new ParameterizedTypeReference<>() {}
+        );
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertTrue(response.getBody().length > 1);
+        assertNotNull(response.getBody().getList());
+        assertTrue(response.getBody().getList().size() > 1);
     }
 
     @Test

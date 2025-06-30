@@ -11,10 +11,11 @@ import es.upm.miw.companyds.tfm_spring.services.exceptions.ConflictException;
 import es.upm.miw.companyds.tfm_spring.services.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -29,8 +30,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Stream<ProductDto> getAllProducts() {
-        return productRepository.findAll().stream().map(ProductDto::ofProduct);
+    public Page<ProductDto> getAllProducts(Pageable pageable) {
+        return this.productRepository.findAll(pageable)
+                .map(ProductDto::ofProduct);
     }
 
     @Override

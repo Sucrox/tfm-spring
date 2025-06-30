@@ -1,17 +1,19 @@
 package es.upm.miw.companyds.tfm_spring.api.controller;
 
+import es.upm.miw.companyds.tfm_spring.api.dto.PagedResponse;
+import es.upm.miw.companyds.tfm_spring.api.dto.Pagination;
 import es.upm.miw.companyds.tfm_spring.api.dto.ProductDto;
 import es.upm.miw.companyds.tfm_spring.api.dto.UpdateProductDto;
 import es.upm.miw.companyds.tfm_spring.services.impl.AuthorizationService;
 import es.upm.miw.companyds.tfm_spring.services.impl.ProductServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(ProductController.PRODUCTS)
@@ -32,8 +34,25 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Stream<ProductDto>> getAllProducts() {
-        return ResponseEntity.ok(this.productService.getAllProducts());
+    public ResponseEntity<PagedResponse<ProductDto>> getAllProducts(
+            @RequestParam(defaultValue = "0") int offset,
+            @RequestParam(defaultValue = "10") int limit) {
+        Page<ProductDto> productPage = productService.getAllProducts(PageRequest.of(offset / limit, limit));
+
+
+        Pagination pagination = new Pagination(
+                productPage.getTotalElements(),
+                productPage.getTotalPages(),
+                offset,
+                limit
+        );
+
+        PagedResponse<ProductDto> response = PagedResponse.<ProductDto>builder()
+                .pagination(pagination)
+                .list(productPage.getContent())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping(PRODUCT_BARCODE)
