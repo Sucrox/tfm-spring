@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>es.upm.miw.companyds</groupId>
 	<artifactId>tfm-spring</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>2.0.0-RELEASE</version>
 	<packaging>jar</packaging>
 
 	<name>tfm-spring</name>
